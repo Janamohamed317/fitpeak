@@ -102,32 +102,3 @@ export const Quick_Links = [
     },
   
 ];
-
-
-export const tips = [
-  {
-    icon: '🏃‍♂️',
-    title: 'Move More!',
-    description: 'Walk daily to maintain heart health and improve fitness.'
-  },
-  {
-    icon: '💧',
-    title: 'Stay Hydrated!',
-    description: 'Drink water throughout the day to keep your body hydrated and improve performance.'
-  },
-  {
-    icon: '💤',
-    title: 'Get Enough Sleep!',
-    description: 'Adequate sleep boosts energy, aids muscle recovery, and improves overall health.'
-  },
-  {
-    icon: '🥗',
-    title: 'Eat Healthy!',
-    description: 'Include vegetables, fruits, and proteins in your diet to maintain good health.'
-  },
-  {
-    icon: '🏋️‍♀️',
-    title: 'Exercise Regularly!',
-    description: 'Make time for daily workouts to stay fit and strengthen your muscles.'
-  }
-];
