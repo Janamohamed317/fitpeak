@@ -10,6 +10,7 @@ import FitnessGoals from './components/FitnessGoals/FitnessGoals';
 import History from './components/History/History';
 import FitnessTips from './components/FitnessTips/FitnessTips';
 import WorkoutApp from './components/Workout/WorkoutApp';
+import Dashboard from './components/Dashboard/Dashboard';
 
 function App() {
 	const [count, setCount] = useState(0);
@@ -26,6 +27,8 @@ function App() {
 				<Route path="/History" element={<History />} />
 				<Route path="/trip-input" element={<FitnessTips />} />
 				<Route path="/workout" element={<WorkoutApp />} />
+				<Route path="/progress" element={<Dashboard />} />
+
 			</Routes>
 		</>
 	);
