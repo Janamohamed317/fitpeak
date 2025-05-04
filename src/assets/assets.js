@@ -88,17 +88,53 @@ export const Quick_Links = [
     {
         id: 1,
         text: 'Tips',
-        icon: faChevronRight
+        icon: faChevronRight,
+        path: '/Tips'
     },
     {
         id: 2,
-        text: 'Blogs',
-        icon: faChevronRight
+        text: 'Home',
+        icon: faChevronRight,
+        path: '/'
     },
     {
         id: 3,
-        text: 'Home',
-        icon: faChevronRight
+        text: 'Profile',
+        icon: faChevronRight,
+        path: '/profile'
     },
-  
+
+];
+
+export const tips = [
+    {
+        id: 1,
+        icon: '🏃‍♂️',
+        title: 'Move More!',
+        description: 'Walk daily to maintain heart health and improve fitness.'
+    },
+    {
+        id: 2,
+        icon: '💧',
+        title: 'Stay Hydrated!',
+        description: 'Drink water throughout the day to keep your body hydrated and improve performance.'
+    },
+    {
+        id: 3,
+        icon: '💤',
+        title: 'Get Enough Sleep!',
+        description: 'Adequate sleep boosts energy, aids muscle recovery, and improves overall health.'
+    },
+    {
+        id: 4,
+        icon: '🥗',
+        title: 'Eat Healthy!',
+        description: 'Include vegetables, fruits, and proteins in your diet to maintain good health.'
+    },
+    {
+        id: 5,
+        icon: '🏋️‍♀️',
+        title: 'Exercise Regularly!',
+        description: 'Make time for daily workouts to stay fit and strengthen your muscles.'
+    }
 ];
