@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
 import styles from './history.module.css';
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 
 const History = () => {
 	const [workouts] = useState([
@@ -111,68 +113,72 @@ const History = () => {
 	};
 
 	return (
-		<div className={styles.container}>
-			<h2>Workout History</h2>
+		<>
+			<Navbar />
+			<div className={styles.container}>
+				<h2>Workout History</h2>
 
-			<div className={styles.filters}>
-				<label>
-					Start Date:
-					<input
-						type="date"
-						value={startDate}
-						onChange={(e) => setStartDate(e.target.value)}
-					/>
-				</label>
-				<label>
-					End Date:
-					<input
-						type="date"
-						value={endDate}
-						onChange={(e) => setEndDate(e.target.value)}
-					/>
-				</label>
-				<label>
-					Workout Type:
-					<select
-						value={workoutType}
-						onChange={(e) => setWorkoutType(e.target.value)}
-					>
-						<option value="">All Types</option>
-						<option value="Cardio">Cardio</option>
-						<option value="Strength">Strength</option>
-						<option value="Yoga">Yoga</option>
-					</select>
-				</label>
-				<button onClick={filterWorkouts}>Apply Filters</button>
-			</div>
+				<div className={styles.filters}>
+					<label>
+						Start Date:
+						<input
+							type="date"
+							value={startDate}
+							onChange={(e) => setStartDate(e.target.value)}
+						/>
+					</label>
+					<label>
+						End Date:
+						<input
+							type="date"
+							value={endDate}
+							onChange={(e) => setEndDate(e.target.value)}
+						/>
+					</label>
+					<label>
+						Workout Type:
+						<select
+							value={workoutType}
+							onChange={(e) => setWorkoutType(e.target.value)}
+						>
+							<option value="">All Types</option>
+							<option value="Cardio">Cardio</option>
+							<option value="Strength">Strength</option>
+							<option value="Yoga">Yoga</option>
+						</select>
+					</label>
+					<button onClick={filterWorkouts}>Apply Filters</button>
+				</div>
 
-			<table className={styles.workoutTable}>
-				<thead>
-					<tr>
-						<th>Date</th>
-						<th>Workout Type</th>
-						<th>Duration</th>
-						<th>Calories Burned</th>
-					</tr>
-				</thead>
-				<tbody>
-					{filteredWorkouts.map((workout, index) => (
-						<tr key={index}>
-							<td>{workout.date}</td>
-							<td>
-								<span className={styles.workoutType}>{workout.type}</span>
-							</td>
-							<td>{workout.duration} min</td>
-							<td>{workout.calories} kcal</td>
+				<table className={styles.workoutTable}>
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Workout Type</th>
+							<th>Duration</th>
+							<th>Calories Burned</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{filteredWorkouts.map((workout, index) => (
+							<tr key={index}>
+								<td>{workout.date}</td>
+								<td>
+									<span className={styles.workoutType}>{workout.type}</span>
+								</td>
+								<td>{workout.duration} min</td>
+								<td>{workout.calories} kcal</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
 
-			<div className={styles.chartContainer}>
-				<canvas id="workoutChart"></canvas>
+				<div className={styles.chartContainer}>
+					<canvas id="workoutChart"></canvas>
+				</div>
 			</div>
-		</div>
+			<Footer />
+		</>
 	);
 };
 

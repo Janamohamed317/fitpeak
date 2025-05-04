@@ -1,33 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './FitnessTips.module.css';
+import { tips } from '../../assets/assets';
+import Footer from '../Footer/Footer';
+import Navbar from '../Navbar/Navbar';
 
-const tips = [
-  {
-    icon: '🏃‍♂️',
-    title: 'Move More!',
-    description: 'Walk daily to maintain heart health and improve fitness.'
-  },
-  {
-    icon: '💧',
-    title: 'Stay Hydrated!',
-    description: 'Drink water throughout the day to keep your body hydrated and improve performance.'
-  },
-  {
-    icon: '💤',
-    title: 'Get Enough Sleep!',
-    description: 'Adequate sleep boosts energy, aids muscle recovery, and improves overall health.'
-  },
-  {
-    icon: '🥗',
-    title: 'Eat Healthy!',
-    description: 'Include vegetables, fruits, and proteins in your diet to maintain good health.'
-  },
-  {
-    icon: '🏋️‍♀️',
-    title: 'Exercise Regularly!',
-    description: 'Make time for daily workouts to stay fit and strengthen your muscles.'
-  }
-];
 
 const FitnessTips = () => {
   const [currentTip, setCurrentTip] = useState(0);
@@ -51,7 +27,6 @@ const FitnessTips = () => {
     setCurrentTip((prev) => (prev - 1 + tips.length) % tips.length);
   };
 
-  // دعم السحب للموبايل
   const handleTouchStart = (e) => {
     setTouchStartX(e.touches[0].clientX);
   };
@@ -64,7 +39,6 @@ const FitnessTips = () => {
     setTouchStartX(null);
   };
 
-  // دعم الأسهم من الكيبورد
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') prevTip();
@@ -75,55 +49,60 @@ const FitnessTips = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.logo} title="Sport Logo">🏅</div>
-      <h2 className={styles.title}>💡 Fitness Tips</h2>
-      <div
-        className={styles.carousel}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <button
-          className={`${styles.arrowButton} ${touchingLeft ? styles.touching : ''}`}
-          onClick={prevTip}
-          aria-label="Previous tip"
-          onTouchStart={() => setTouchingLeft(true)}
-          onTouchEnd={() => { setTouchingLeft(false); prevTip(); }}
-          onTouchCancel={() => setTouchingLeft(false)}
+    <>
+      <Navbar />
+
+      <div className={styles.container}>
+        <div className={styles.logo} title="Sport Logo">🏅</div>
+        <h2 className={styles.title}>💡 Fitness Tips</h2>
+        <div
+          className={styles.carousel}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
-          &#8249;
-        </button>
-        <div className={styles.tipCard}>
-          <h4 className={styles.tipTitle}>{tips[currentTip].icon} {tips[currentTip].title}</h4>
-          <p className={styles.tipDesc}>{tips[currentTip].description}</p>
+          <button
+            className={`${styles.arrowButton} ${touchingLeft ? styles.touching : ''}`}
+            onClick={prevTip}
+            aria-label="Previous tip"
+            onTouchStart={() => setTouchingLeft(true)}
+            onTouchEnd={() => { setTouchingLeft(false); prevTip(); }}
+            onTouchCancel={() => setTouchingLeft(false)}
+          >
+            &#8249;
+          </button>
+          <div className={styles.tipCard}>
+            <h4 className={styles.tipTitle}>{tips[currentTip].icon} {tips[currentTip].title}</h4>
+            <p className={styles.tipDesc}>{tips[currentTip].description}</p>
+          </div>
+          <button
+            className={`${styles.arrowButton} ${touchingRight ? styles.touching : ''}`}
+            onClick={nextTip}
+            aria-label="Next tip"
+            onTouchStart={() => setTouchingRight(true)}
+            onTouchEnd={() => { setTouchingRight(false); nextTip(); }}
+            onTouchCancel={() => setTouchingRight(false)}
+          >
+            &#8250;
+          </button>
         </div>
-        <button
-          className={`${styles.arrowButton} ${touchingRight ? styles.touching : ''}`}
-          onClick={nextTip}
-          aria-label="Next tip"
-          onTouchStart={() => setTouchingRight(true)}
-          onTouchEnd={() => { setTouchingRight(false); nextTip(); }}
-          onTouchCancel={() => setTouchingRight(false)}
-        >
-          &#8250;
-        </button>
+
+        <div className={styles.dots}>
+          {tips.map((_, idx) => (
+            <span
+              key={idx}
+              className={idx === currentTip ? styles.activeDot : styles.dot}
+              onClick={() => setCurrentTip(idx)}
+              aria-label={`Go to tip ${idx + 1}`}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setCurrentTip(idx);
+              }}
+            />
+          ))}
+        </div>
       </div>
-      {/* مؤشر النقاط أسفل الكارد */}
-      <div className={styles.dots}>
-        {tips.map((_, idx) => (
-          <span
-            key={idx}
-            className={idx === currentTip ? styles.activeDot : styles.dot}
-            onClick={() => setCurrentTip(idx)}
-            aria-label={`Go to tip ${idx + 1}`}
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') setCurrentTip(idx);
-            }}
-          />
-        ))}
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

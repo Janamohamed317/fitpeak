@@ -64,16 +64,7 @@ export const Header = () => {
   );
 };
 
-// Footer Component
-export const Footer = () => {
-  return (
-    <footer className={styles.footer}>
-      <div className="container">
-        <p className="text-center">&copy; {new Date().getFullYear()} Fitness Tracker Pro. All rights reserved.</p>
-      </div>
-    </footer>
-  );
-};
+
 
 // Notification Component
 export const Notification = ({ message, type }) => {

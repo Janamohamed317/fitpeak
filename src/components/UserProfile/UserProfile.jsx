@@ -3,12 +3,14 @@ import styles from './UserProfile.module.css';
 import { imgs } from '../../assets/assets';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
+import { useNavigate } from 'react-router';
 
 const UserProfile = () => {
   const [age, setAge] = useState(22);
   const [height, setHeight] = useState(165);
   const [weight, setWeight] = useState(60);
   const [bmi, setBmi] = useState(0);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (height && weight) {
@@ -17,6 +19,7 @@ const UserProfile = () => {
       setBmi(calculatedBmi.toFixed(1));
     }
   }, [height, weight]);
+
 
   return (
     <>
@@ -87,6 +90,10 @@ const UserProfile = () => {
               <label>BMI:</label>
               <span>{bmi}</span>
             </div>
+            <button className={styles.HistoryBtn}
+              onClick={() => navigate('/History')}>
+              User History
+            </button>
           </div>
         </div>
       </div>

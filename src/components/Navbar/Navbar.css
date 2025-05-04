@@ -26,3 +26,9 @@
 .nav-link:hover {
   color: #1c8200 !important;
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    background-color: black !important;
+  }
+}

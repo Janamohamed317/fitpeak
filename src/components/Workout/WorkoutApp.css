@@ -16,7 +16,7 @@
   --border-radius: 8px;
 }
 
-.app {
+.app1 {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@
   overflow-x: hidden;
 }
 
-.container {
+.container1 {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;

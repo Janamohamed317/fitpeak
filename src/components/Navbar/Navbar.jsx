@@ -38,19 +38,20 @@ const Navbar = () => {
 								Profile
 							</Link>
 						</li>
-						<li className="nav-item">
-							<Link className="nav-link text-white" to="/trip-input">
-								Tips
-							</Link>
-						</li>
+
 						<li className="nav-item">
 							<Link className="nav-link text-white" to="/workout">
-								Workout
+								Workouts
 							</Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link text-white" to="/history">
-								History
+							<Link className="nav-link text-white" to="/Fitness-goals">
+								Set Goal
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link className="nav-link text-white" to="/progress">
+								Progress
 							</Link>
 						</li>
 						{LoggedOut && (

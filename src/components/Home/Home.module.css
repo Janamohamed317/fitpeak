@@ -35,13 +35,14 @@
     border: none;
     color: white;
     margin-top: 2rem;
+    margin-right: 58rem;
     background-color: green;
     border-radius: 1rem;
     font-size: 1.3rem;
     padding: 1.6rem;
 }
-.hero_btn:hover
-{
+
+.hero_btn:hover {
     background-color: rgb(0, 0, 0);
     color: rgb(3, 255, 3);
     scale: 0.9;
@@ -74,7 +75,8 @@
     margin-bottom: 2rem;
 }
 
-.about_txt, .guide_li {
+.about_txt,
+.guide_li {
     font-size: 1.8rem;
 }
 
@@ -119,3 +121,8 @@
 }
 
 
+@media (max-width: 768px) {
+    .main_container {
+        padding-top: 2.6rem;
+    }
+}
