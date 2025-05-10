@@ -24,7 +24,7 @@ function App() {
 				<Route path="/profile" element={<UserProfile />} />
 				<Route path="/Fitness-goals" element={<FitnessGoals />} />
 				<Route path="/History" element={<History />} />
-				<Route path="/trip-input" element={<FitnessTips />} />
+				<Route path="/tips" element={<FitnessTips />} />
 				<Route path="/workout" element={<WorkoutApp />} />
 				<Route path="/progress" element={<Dashboard />} />
 

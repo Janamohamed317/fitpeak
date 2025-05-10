@@ -5,13 +5,14 @@ import Footer from '../Footer/Footer';
 import Slider from '../Swiper/Slider';
 import Navbar from '../Navbar/Navbar';
 import { useNavigate } from 'react-router';
-// import Navbar from '../Navbar/Navbar';
 
 function Home() {
     const navigate = useNavigate()
     return (
         <>
+
             <Navbar />
+
             <div className={home.main_container}>
                 <div className="row gx-0">
                     <div className="col-12 ">
