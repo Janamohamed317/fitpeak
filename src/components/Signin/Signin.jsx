@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEmail, setPassword, toggleShowPassword, setLoggedOut } from '../../Redux/appSlice';
+import { setEmail, setPassword, setUsername, toggleShowPassword, setLoggedOut } from '../../Redux/appSlice';
 import styles from './Signin.module.css';
 import login_img from '../../assets/login.png';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 function Signin() {
   const email = useSelector((state) => state.app.email);
@@ -16,7 +17,6 @@ function Signin() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  // Clear fields when component mounts
   useEffect(() => {
     dispatch(setEmail(''));
     dispatch(setPassword(''));
@@ -33,7 +33,7 @@ function Signin() {
       if (!value) setPasswordError('Password is required');
       else if (!passwordRegex.test(value)) {
         setPasswordError(`Password must contain:
-                          - 6+ characters
+                          - 8+ characters
                           - 1 uppercase letter
                           - 1 lowercase letter
                           - 1 number
@@ -42,16 +42,13 @@ function Signin() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     validateSignIn('email', email);
     validateSignIn('password', password);
 
-    // const isEmailEmpty = !email.trim();
-    // const isPasswordEmpty = !password.trim();
     const isAnyFieldEmpty = !email || !password;
-
     const hasErrors = emailError || passwordError;
 
     if (isAnyFieldEmpty) {
@@ -61,10 +58,10 @@ function Signin() {
         text: 'Please fill in all required fields',
         confirmButtonText: 'OK',
       });
-
       return;
     }
-    else if (hasErrors) {
+
+    if (hasErrors) {
       Swal.fire({
         icon: 'error',
         title: 'Validation Error',
@@ -73,8 +70,56 @@ function Signin() {
       });
       return;
     }
-    dispatch(setLoggedOut(false));
-    navigate('/');
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/auth/login', {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        dispatch(setLoggedOut(false));
+        dispatch(setEmail(response.data.user.email));
+        dispatch(setUsername(response.data.user.username));
+        
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('email', response.data.user.email);
+        localStorage.setItem('username', response.data.user.username);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Logged in successfully!',
+          confirmButtonText: 'OK',
+        }).then(() => {
+          navigate('/'); 
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid Credentials',
+            text: 'The email or password you entered is incorrect.',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Something went wrong during login. Please try again later.',
+            confirmButtonText: 'OK',
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Network Error',
+          text: 'There was an issue connecting to the server. Please check your internet connection.',
+          confirmButtonText: 'OK',
+        });
+      }
+    }
   };
 
   return (
@@ -125,7 +170,7 @@ function Signin() {
           </form>
 
           <p className={styles.Login_text2}>
-            Doesn't have an account?
+            Don't have an account?
             <span
               className={styles.Signup_text}
               onClick={() => {

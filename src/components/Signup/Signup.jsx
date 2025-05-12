@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEmail, setUsername, setPassword, setLoggedOut, toggleShowPassword } from '../../Redux/appSlice';
+import {
+    setEmail,
+    setUsername,
+    setPassword,
+    toggleShowPassword,
+} from '../../Redux/appSlice';
 import styles1 from './Signup.module.css';
 import signupimg from '../../assets/login.png';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 function Signup() {
     const email = useSelector((state) => state.app.email);
@@ -28,33 +34,38 @@ function Signup() {
 
     const validateField = (field, value) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
+
         if (field === 'email') {
             if (!value) setEmailError('Email is required');
-            else if (!emailRegex.test(value)) setEmailError('Invalid email format');
+            else if (!emailRegex.test(value))
+                setEmailError('Invalid email format');
             else setEmailError('');
         } else if (field === 'username') {
             if (!value) setUsernameError('Username is required');
-            else if (value.length < 3) setUsernameError('Username must be at least 3 characters');
+            else if (value.length < 3)
+                setUsernameError('Username must be at least 3 characters');
             else setUsernameError('');
         } else if (field === 'password') {
             if (!value) setPasswordError('Password is required');
             else if (!passwordRegex.test(value)) {
                 setPasswordError(`Password must contain:
-                          - 6+ characters
-                          - 1 uppercase letter
-                          - 1 lowercase letter
-                          - 1 number
-                          - 1 special character (!@#$%^&*)`);
+        - 6+ characters
+        - 1 uppercase letter
+        - 1 lowercase letter
+        - 1 number
+        - 1 special character (!@#$%^&*)`);
             } else setPasswordError('');
         } else if (field === 'confirmedPassword') {
             if (!value) setConfirmedPasswordError('Please confirm your password');
-            else if (value !== password) setConfirmedPasswordError("Passwords don't match");
+            else if (value !== password)
+                setConfirmedPasswordError("Passwords don't match");
             else setConfirmedPasswordError('');
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         validateField('email', email);
@@ -63,8 +74,8 @@ function Signup() {
         validateField('confirmedPassword', confirmedPassword);
 
         const isAnyFieldEmpty = !email || !username || !password || !confirmedPassword;
-
-        const hasErrors = emailError || usernameError || passwordError || confirmedPasswordError;
+        const hasErrors =
+            emailError || usernameError || passwordError || confirmedPasswordError;
 
         if (isAnyFieldEmpty || hasErrors) {
             Swal.fire({
@@ -78,9 +89,54 @@ function Signup() {
             return;
         }
 
-        // Only navigate if validation passes
-        navigate('/signin');
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/auth/signup', {
+                email,
+                username,
+                password,
+            });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Signed up successfully!',
+                confirmButtonText: 'OK',
+            }).then(() => {
+                navigate('/signin');
+            });
+        } catch (error) {
+            if (error.response) {
+                const { status } = error.response;
+                if (status === 409) {
+                    if (error.response.data.message.includes('email')) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Email already exists',
+                            text: 'The email you entered is already registered. Please use a different email.',
+                        });
+                    } else if (error.response.data.message.includes('username')) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Username already exists',
+                            text: 'The username you entered is already taken. Please choose a different username.',
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Signup Failed',
+                        text: error.response?.data?.message || 'Something went wrong during signup.',
+                    });
+                }
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Signup Failed',
+                    text: 'Something went wrong during signup. Please try again later.',
+                });
+            }
+        }
     };
+
 
     return (
         <div className={styles1.main_container}>
@@ -101,7 +157,9 @@ function Signup() {
                                 validateField('username', e.target.value);
                             }}
                         />
-                        {usernameError && <p className={styles1.error_text}>{usernameError}</p>}
+                        {usernameError && (
+                            <p className={styles1.error_text}>{usernameError}</p>
+                        )}
 
                         <label className={styles1.Input_label}>Email</label>
                         <input
@@ -113,7 +171,9 @@ function Signup() {
                                 validateField('email', e.target.value);
                             }}
                         />
-                        {emailError && <p className={styles1.error_text}>{emailError}</p>}
+                        {emailError && (
+                            <p className={styles1.error_text}>{emailError}</p>
+                        )}
 
                         <label className={styles1.Input_label}>Password</label>
                         <input
@@ -126,7 +186,9 @@ function Signup() {
                                 validateField('password', e.target.value);
                             }}
                         />
-                        {passwordError && <p className={styles1.error_text}>{passwordError}</p>}
+                        {passwordError && (
+                            <p className={styles1.error_text}>{passwordError}</p>
+                        )}
 
                         <label className={styles1.Input_label}>Confirm Password</label>
                         <input
@@ -139,7 +201,9 @@ function Signup() {
                                 validateField('confirmedPassword', e.target.value);
                             }}
                         />
-                        {confirmedPasswordError && <p className={styles1.error_text}>{confirmedPasswordError}</p>}
+                        {confirmedPasswordError && (
+                            <p className={styles1.error_text}>{confirmedPasswordError}</p>
+                        )}
 
                         <div className={styles1.form_checkbox_container}>
                             <label className={styles1.checkbox_label}>Show Password</label>
@@ -157,7 +221,10 @@ function Signup() {
 
                     <p className={styles1.Sigunp_text2}>
                         Already have an account?
-                        <span className={styles1.Signin_text} onClick={() => navigate('/signin')}>
+                        <span
+                            className={styles1.Signin_text}
+                            onClick={() => navigate('/signin')}
+                        >
                             Sign in
                         </span>
                     </p>

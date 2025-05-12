@@ -1,16 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './UserProfile.module.css';
 import { imgs } from '../../assets/assets';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { resetUser, setEmail, setUsername } from '../../Redux/appSlice';
 
 const UserProfile = () => {
   const [age, setAge] = useState(22);
   const [height, setHeight] = useState(165);
   const [weight, setWeight] = useState(60);
   const [bmi, setBmi] = useState(0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const username = useSelector((state) => state.app.username);
+  const email = useSelector((state) => state.app.email);
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    const storedUsername = localStorage.getItem('username');
+
+    if (!email && storedEmail) {
+      dispatch(setEmail(storedEmail));
+    }
+
+    if (!username && storedUsername) {
+      dispatch(setUsername(storedUsername));
+    }
+  }, [email, username, dispatch]);
 
   useEffect(() => {
     if (height && weight) {
@@ -20,6 +39,14 @@ const UserProfile = () => {
     }
   }, [height, weight]);
 
+  // Handle Logout
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('username');
+    dispatch(resetUser());
+    navigate('/signin');
+  };
 
   return (
     <>
@@ -32,9 +59,8 @@ const UserProfile = () => {
         <div className={styles.profileGrid}>
           <div className={styles.profileSidebar}>
             <img src={imgs.UserImg} alt="User" className={styles.profileImg} />
-            <h4 className={styles.username}>Username</h4>
+            <h4 className={styles.username}>{username}</h4>
             <div className={styles.buttonContainer}>
-              <button className={styles.editBtn}>Edit</button>
               <button className={styles.deleteBtn}>Delete Account</button>
             </div>
           </div>
@@ -43,20 +69,13 @@ const UserProfile = () => {
             <h3 className={styles.sectionTitle}>About</h3>
             <div className={styles.infoRow}>
               <label>Full Name:</label>
-              <span>Username</span>
+              <span>{username}</span>
             </div>
             <div className={styles.infoRow}>
               <label>Email:</label>
-              <span>abc@gmail.com</span>
+              <span>{email}</span>
             </div>
-            <div className={styles.infoRow}>
-              <label>Phone:</label>
-              <span>+0123458900</span>
-            </div>
-            <div className={styles.infoRow}>
-              <label>Address:</label>
-              <span>Cairo, Egypt</span>
-            </div>
+         
 
             <h3 className={`${styles.sectionTitle} ${styles.mt}`}>Fitness Info</h3>
             <div className={styles.infoRow}>
@@ -64,8 +83,8 @@ const UserProfile = () => {
               <input
                 type="number"
                 value={age}
-                onChange={(e) => setAge(e.target.value)}
                 className={styles.profileInput}
+                onChange={(e) => setAge(Number(e.target.value))}
               />
             </div>
             <div className={styles.infoRow}>
@@ -73,8 +92,8 @@ const UserProfile = () => {
               <input
                 type="number"
                 value={height}
-                onChange={(e) => setHeight(e.target.value)}
                 className={styles.profileInput}
+                onChange={(e) => setHeight(Number(e.target.value))}
               />
             </div>
             <div className={styles.infoRow}>
@@ -82,16 +101,18 @@ const UserProfile = () => {
               <input
                 type="number"
                 value={weight}
-                onChange={(e) => setWeight(e.target.value)}
                 className={styles.profileInput}
+                onChange={(e) => setWeight(Number(e.target.value))}
               />
             </div>
             <div className={styles.infoRow}>
               <label>BMI:</label>
               <span>{bmi}</span>
             </div>
-            <button className={styles.HistoryBtn}
-              onClick={() => navigate('/History')}>
+            <button
+              className={styles.HistoryBtn}
+              onClick={() => navigate('/History')}
+            >
               User History
             </button>
           </div>
@@ -99,7 +120,6 @@ const UserProfile = () => {
       </div>
       <Footer />
     </>
-
   );
 };
 

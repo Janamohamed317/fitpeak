@@ -27,8 +27,23 @@ const appSlice = createSlice({
     setPassword: (state, action) => {
       state.password = action.payload;
     },
+    resetUser: (state) => {
+      state.email = '';
+      state.username = '';
+      state.password = '';
+      state.showPassword = false;
+      state.loggedOut = true;
+    },
   },
 });
 
-export const { toggleShowPassword, setLoggedOut, setEmail, setUsername, setPassword } = appSlice.actions;
+export const {
+  toggleShowPassword,
+  setLoggedOut,
+  setEmail,
+  setUsername,
+  setPassword,
+  resetUser,
+} = appSlice.actions;
+
 export default appSlice.reducer;

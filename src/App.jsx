@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import Home from './components/Home/Home';
-import Navbar from './components/Navbar/Navbar';
-import { Route, Router, Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 import Signin from './components/Signin/Signin';
 import Signup from './components/Signup/Signup';
 import UserProfile from './components/UserProfile/UserProfile';
@@ -12,8 +11,25 @@ import FitnessTips from './components/FitnessTips/FitnessTips';
 import WorkoutApp from './components/Workout/WorkoutApp';
 import Dashboard from './components/Dashboard/Dashboard';
 
+import { useDispatch } from 'react-redux';
+import { setEmail, setUsername, setLoggedOut } from './Redux/appSlice';
+
 function App() {
-	const [count, setCount] = useState(0);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		const email = localStorage.getItem('email');
+		const username = localStorage.getItem('username');
+
+		if (token && email && username) {
+			dispatch(setEmail(email));
+			dispatch(setUsername(username));
+			dispatch(setLoggedOut(false));
+		} else {
+			dispatch(setLoggedOut(true));
+		}
+	}, [dispatch]);
 
 	return (
 		<>
@@ -27,7 +43,6 @@ function App() {
 				<Route path="/tips" element={<FitnessTips />} />
 				<Route path="/workout" element={<WorkoutApp />} />
 				<Route path="/progress" element={<Dashboard />} />
-
 			</Routes>
 		</>
 	);
