@@ -6,6 +6,7 @@ const initialState = {
   email: '',
   username: '',
   password: '',
+  userId: '', // Add userId here
 };
 
 const appSlice = createSlice({
@@ -27,10 +28,14 @@ const appSlice = createSlice({
     setPassword: (state, action) => {
       state.password = action.payload;
     },
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+    },
     resetUser: (state) => {
       state.email = '';
       state.username = '';
       state.password = '';
+      state.userId = '';
       state.showPassword = false;
       state.loggedOut = true;
     },
@@ -43,6 +48,7 @@ export const {
   setEmail,
   setUsername,
   setPassword,
+  setUserId, // Export this action
   resetUser,
 } = appSlice.actions;
 

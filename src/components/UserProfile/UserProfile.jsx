@@ -5,7 +5,7 @@ import { imgs } from '../../assets/assets';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
-import { resetUser, setEmail, setUsername } from '../../Redux/appSlice';
+import { setEmail, setUsername } from '../../Redux/appSlice';
 
 const UserProfile = () => {
   const [age, setAge] = useState(22);
@@ -39,14 +39,7 @@ const UserProfile = () => {
     }
   }, [height, weight]);
 
-  // Handle Logout
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('username');
-    dispatch(resetUser());
-    navigate('/signin');
-  };
+
 
   return (
     <>

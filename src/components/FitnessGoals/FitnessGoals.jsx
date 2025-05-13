@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './FitnessGoals.module.css';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
+import axios from 'axios';
 
 const FitnessGoals = () => {
   const [goals, setGoals] = useState([]);
@@ -9,18 +10,44 @@ const FitnessGoals = () => {
   const [progress, setProgress] = useState('');
   const [showGoals, setShowGoals] = useState(false);
 
-  const addGoal = () => {
-    if (goalName.trim() === '' || progress === '') return;
+  const userId = localStorage.getItem('ID');
 
-    const newGoal = {
-      name: goalName,
-      progress: parseInt(progress, 10),
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/goals/user/${userId}`);
+        setGoals(response.data);
+        // console.log('Fetched goals:', response.data);
+      } catch (error) {
+        console.error('Error fetching goals:', error);
+      }
     };
 
-    setGoals([...goals, newGoal]);
-    setGoalName('');
-    setProgress('');
+    if (userId) {
+      fetchGoals();
+    }
+  }, [userId]);
+
+  const addGoal = async () => {
+    if (goalName.trim() === '' || progress === '') return;
+
+    try {
+      const res = await axios.post(`http://localhost:5000/api/goals/add`, {
+        userId,
+        goal: goalName,
+        progress: Number(progress), // Ensure it's a number
+      });
+
+      const newGoal = res.data; // This is the object your API returns
+
+      setGoals([...goals, newGoal]);
+      setGoalName('');
+      setProgress('');
+    } catch (error) {
+      console.error('Error adding goal:', error);
+    }
   };
+
 
   const toggleGoals = () => {
     setShowGoals(!showGoals);
@@ -65,9 +92,9 @@ const FitnessGoals = () => {
             {goals.length === 0 ? (
               <p className={styles.emptyMessage}>No goals added yet</p>
             ) : (
-              goals.map((goal, index) => (
-                <div className={styles.goalCard} key={index}>
-                  <span className={styles.goalName}>{goal.name}</span>
+              goals.map((goal) => (
+                <div className={styles.goalCard} key={goal._id}>
+                  <span className={styles.goalName}>{goal.goal}</span>
                   <div className={styles.progressBar}>
                     <div
                       className={styles.progressFill}

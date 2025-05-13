@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEmail, setPassword, setUsername, toggleShowPassword, setLoggedOut } from '../../Redux/appSlice';
+import {
+  setEmail,
+  setPassword,
+  setUsername,
+  setUserId, 
+  toggleShowPassword,
+  setLoggedOut,
+} from '../../Redux/appSlice';
+
 import styles from './Signin.module.css';
 import login_img from '../../assets/login.png';
 import { useNavigate } from 'react-router-dom';
@@ -81,10 +89,14 @@ function Signin() {
         dispatch(setLoggedOut(false));
         dispatch(setEmail(response.data.user.email));
         dispatch(setUsername(response.data.user.username));
+        dispatch(setUserId(response.data.user._id));
         
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('email', response.data.user.email);
         localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('ID', response.data.user._id);
+
+
 
         Swal.fire({
           icon: 'success',
@@ -174,7 +186,6 @@ function Signin() {
             <span
               className={styles.Signup_text}
               onClick={() => {
-                // Clear fields before navigating
                 dispatch(setEmail(''));
                 dispatch(setPassword(''));
                 navigate('/signup');
