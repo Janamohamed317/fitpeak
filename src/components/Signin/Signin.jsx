@@ -89,7 +89,7 @@ function Signin() {
         dispatch(setLoggedOut(false));
         dispatch(setEmail(response.data.user.email));
         dispatch(setUsername(response.data.user.username));
-        dispatch(setUserId(response.data.user._id));
+        dispatch(setUserId(response.data.user.userId));
         
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('email', response.data.user.email);
