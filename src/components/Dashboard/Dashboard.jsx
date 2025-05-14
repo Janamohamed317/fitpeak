@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Dashboard.css";
 import Navbar from '../Navbar/Navbar';
+import Footer from "../Footer/Footer";
 
 const Dashboard = () => {
   const [workouts, setWorkouts] = useState(0);
@@ -19,7 +20,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="container mt-5">
+      <div className="container mt-5 mb-5">
         <div className="header">Dashboard</div>
         <div className="stats">
           <div className="stat-box">
@@ -55,6 +56,8 @@ const Dashboard = () => {
           <p>Graph displayed here</p>
         </div>
       </div>
+      
+      <Footer />
     </>
   );
 };

@@ -6,7 +6,7 @@ const initialState = {
   email: '',
   username: '',
   password: '',
-  userId: '', // Add userId here
+  userId: '', 
 };
 
 const appSlice = createSlice({
@@ -48,7 +48,7 @@ export const {
   setEmail,
   setUsername,
   setPassword,
-  setUserId, // Export this action
+  setUserId, 
   resetUser,
 } = appSlice.actions;
 

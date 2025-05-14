@@ -3,14 +3,16 @@ import styles from './FitnessGoals.module.css';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const FitnessGoals = () => {
   const [goals, setGoals] = useState([]);
   const [goalName, setGoalName] = useState('');
   const [progress, setProgress] = useState('');
   const [showGoals, setShowGoals] = useState(false);
+  const [goalError, setGoalError] = useState('');
 
-  const userId = localStorage.getItem('ID');
+  const userId = useSelector((state) => state.app.userId);
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -29,16 +31,26 @@ const FitnessGoals = () => {
   }, [userId]);
 
   const addGoal = async () => {
-    if (goalName.trim() === '' || progress === '') return;
+    if (goalName.trim().length < 3) {
+      setGoalError('Goal name must be at least 3 characters long.');
+      return;
+    }
+
+    if (progress === '') {
+      setGoalError('Progress cannot be empty.');
+      return;
+    }
+
+    setGoalError(''); 
 
     try {
       const res = await axios.post(`http://localhost:5000/api/goals/add`, {
         userId,
         goal: goalName,
-        progress: Number(progress), // Ensure it's a number
+        progress: Number(progress), 
       });
 
-      const newGoal = res.data; // This is the object your API returns
+      const newGoal = res.data; 
 
       setGoals([...goals, newGoal]);
       setGoalName('');
@@ -47,7 +59,6 @@ const FitnessGoals = () => {
       console.error('Error adding goal:', error);
     }
   };
-
 
   const toggleGoals = () => {
     setShowGoals(!showGoals);
@@ -77,6 +88,8 @@ const FitnessGoals = () => {
             max="100"
           />
         </div>
+
+        {goalError && <p className={styles.errorMessage}>{goalError}</p>} 
 
         <div className={styles.buttonGroup}>
           <button className={styles.actionButton} onClick={addGoal}>
